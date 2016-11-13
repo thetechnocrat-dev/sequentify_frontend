@@ -1,11 +1,14 @@
 FROM node
 ENV NPM_CONFIG_LOGLEVEL warn
 
+RUN npm install -g http-server
 RUN mkdir -p /app
 WORKDIR /app
 
 COPY README.md /app/ ./
 RUN npm install
+RUN npm run build
 
-EXPOSE 3000
-CMD [ "npm", "start" ]
+CMD cd build && hs
+
+EXPOSE 8080
