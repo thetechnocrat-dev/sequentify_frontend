@@ -31,28 +31,28 @@ class App extends Component {
 
   render() {
     var width;
-    var height;
+    var minHeight;
     var marginTop;
-    var inputSeqHeight;
+    var sectionHeight;
     if (this.state.windowWidth < Style.xsCutoff) {
       width = '100%';
-      height = this.state.windowHeight;
-      inputSeqHeight = height * 0.2;
+      minHeight = this.state.windowHeight;
+      sectionHeight = minHeight * 0.2;
       marginTop = 0;
     } else if (this.state.windowWidth < Style.smCutoff) {
       width = '723px';
-      height = this.state.windowHeight * 0.9;
-      inputSeqHeight = height * 0.4;
+      minHeight = this.state.windowHeight * 0.9;
+      sectionHeight = minHeight * 0.4;
       marginTop = this.state.windowHeight * 0.05;
     } else if (this.state.windowWidth < Style.mdCutoff) {
       width = '933px';
-      height = this.state.windowHeight * 0.8;
-      inputSeqHeight = height * 0.4;
+      minHeight = this.state.windowHeight * 0.8;
+      sectionHeight = minHeight * 0.4;
       marginTop = this.state.windowHeight * 0.1;
     } else {
       width = '1127px';
-      height = this.state.windowHeight * 0.8;
-      inputSeqHeight = height * 0.4;
+      minHeight = this.state.windowHeight * 0.8;
+      sectionHeight = minHeight * 0.4;
       marginTop = this.state.windowHeight * 0.1;
     }
 
@@ -60,6 +60,7 @@ class App extends Component {
       width: width,
       margin: 'auto',
       marginTop: marginTop,
+      minHeight: minHeight,
     }
 
     var gridStyle = {
@@ -74,8 +75,8 @@ class App extends Component {
     return (
       <Panel style={panelStyle} header={panelTitle} bsStyle="primary">
         <Grid style={gridStyle}>
-          <AlignInput updateOutput={this.updateOutput.bind(this)} height={inputSeqHeight} />
-          <AlignOutput output={this.state.output}/>
+          <AlignInput updateOutput={this.updateOutput.bind(this)} height={sectionHeight} />
+          <AlignOutput output={this.state.output} height={sectionHeight} />
         </Grid>
       </Panel>
     );

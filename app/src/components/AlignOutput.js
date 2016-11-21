@@ -20,7 +20,7 @@ class AlignOutput extends Component {
     return (
       <Row>
         <Col xs={12}>
-          <Well>{this.makeSeqPairs()}</Well>
+          <Well style={{ minHeight: this.props.height }} >{this.makeSeqPairs()}</Well>
         </Col>
       </Row>
     )
@@ -29,6 +29,7 @@ class AlignOutput extends Component {
 
 AlignOutput.propTypes = {
   output: React.PropTypes.array.isRequired,
+  height: React.PropTypes.number.isRequired,
 }
 
 export default AlignOutput;

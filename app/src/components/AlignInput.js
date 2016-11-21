@@ -28,8 +28,8 @@ class AlignInput extends Component {
   }
 
   clickAlign() {
-    var errorsA = this.validateInput(this.state.seqA)
-    var errorsB = this.validateInput(this.state.seqB)
+    var errorsA = this.validateInput(this.state.seqA);
+    var errorsB = this.validateInput(this.state.seqB);
     if (errorsA.length === 0 && errorsB.length === 0) {
       this.setState({ errorsA: [], errorsB: [], isLoading: true });
       axios.post('http://localhost:8080/align', {
