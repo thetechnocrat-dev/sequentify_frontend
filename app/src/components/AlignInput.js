@@ -1,26 +1,27 @@
 import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
 import axios from 'axios';
-import { Alert, Row, Col, FormGroup, FormControl, Button } from 'react-bootstrap/lib';
+import { DropdownButton, MenuItem, Alert, Row, Col, FormGroup, FormControl, Button } from 'react-bootstrap/lib';
+import Sequences from '../sequences';
 
 // custom components
 
 class AlignInput extends Component {
   state = {
     isLoading: false,
-    seqA: '',
-    seqB: '',
+    titleA: 'Select an Example Sequence',
+    titleB: 'Select an Example Sequence',
     errorsA: [],
     errorsB: [],
   };
 
   validateInput(seq) {
-    const nucleotides = ['a', 't', 'c', 'g', 'A', 'T', 'C', 'G'];
     var errors = [];
     if (seq.length === 0) {
       errors.push('Input sequence is required');
     }
 
-    if (!seq.split('').every(el => { return nucleotides.includes(el) })) {
+    if (!seq.match(/^[gctaGCTA\s]+$/)) {
       errors.push('Input sequence can only contain a, t, c, g, A, T, C, or G.');
     }
 
@@ -28,13 +29,15 @@ class AlignInput extends Component {
   }
 
   clickAlign() {
-    var errorsA = this.validateInput(this.state.seqA);
-    var errorsB = this.validateInput(this.state.seqB);
+    var seqA = ReactDOM.findDOMNode(this.refs.formA).value;
+    var seqB = ReactDOM.findDOMNode(this.refs.formB).value;
+    var errorsA = this.validateInput(seqA);
+    var errorsB = this.validateInput(seqB);
     if (errorsA.length === 0 && errorsB.length === 0) {
       this.setState({ errorsA: [], errorsB: [], isLoading: true });
       axios.post('http://localhost:8080/align', {
-          SeqA: this.state.seqA.toLowerCase(),
-          SeqB: this.state.seqB.toLowerCase(),
+          SeqA: seqA.toLowerCase().replace(/\s/g, ''),
+          SeqB: seqB.toLowerCase().replace(/\s/g, ''),
         })
         .then(response => {
           this.setState({ isLoading: false });
@@ -66,15 +69,43 @@ class AlignInput extends Component {
     }
   }
 
+  clickSeqItem(ref, sequence, name, titleKey) {
+    ReactDOM.findDOMNode(this.refs[ref]).value = sequence;
+    var newState = {};
+    newState[titleKey] = name;
+    this.setState(newState);
+  }
+
+  makeSeqMenuItems(ref, titleKey) {
+    return Sequences.map((seq, i) => {
+      return <MenuItem key={i} onClick={this.clickSeqItem.bind(this, ref, seq.sequence, seq.name, titleKey)}>{seq.name}</MenuItem>;
+    });
+  }
+  
+  makeSeqDropwdown(ref, titleKey) {
+    return (
+      <DropdownButton
+        title={this.state[titleKey]}
+        bsStyle={'primary'}
+        style={{ marginBottom: '10px' }}
+        id="select a sequence"
+      >
+        {this.makeSeqMenuItems(ref, titleKey)}
+      </DropdownButton>
+    );
+  }
+
   render () {
     return (
       <Row>
         <Col xs={12} sm={6}>
           {this.makeErrorAlert('errorsA')}
+          {this.makeSeqDropwdown('formA', 'titleA')}
           <FormGroup controlId="formControlsTextarea">
             <FormControl
+              ref="formA"
               componentClass="textarea"
-              placeholder="Insert first sequence here"
+              placeholder="Or insert a sequence here"
               style={{ height: this.props.height }}
               onChange={this.handleSequenceChange.bind(this, 'seqA')}
             />
@@ -83,10 +114,12 @@ class AlignInput extends Component {
         
         <Col xs={12} sm={6}>
           {this.makeErrorAlert('errorsA')}
+          {this.makeSeqDropwdown('formB', 'titleB')}
           <FormGroup controlId="formControlsTextarea">
             <FormControl
+              ref="formB"
               componentClass="textarea"
-              placeholder="Insert second sequence here"
+              placeholder="Or insert a sequence here"
               style={{ height: this.props.height }}
               onChange={this.handleSequenceChange.bind(this, 'seqB')}
             />
