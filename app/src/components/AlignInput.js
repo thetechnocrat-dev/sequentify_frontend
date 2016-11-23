@@ -35,7 +35,7 @@ class AlignInput extends Component {
     var errorsB = this.validateInput(seqB);
     if (errorsA.length === 0 && errorsB.length === 0) {
       this.setState({ errorsA: [], errorsB: [], isLoading: true });
-      axios.post('http://localhost:8080/align', {
+      axios.post('http://app.sequentify.com/align', {
           SeqA: seqA.toLowerCase().replace(/\s/g, ''),
           SeqB: seqB.toLowerCase().replace(/\s/g, ''),
         })
