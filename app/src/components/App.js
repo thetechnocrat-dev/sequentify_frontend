@@ -48,12 +48,12 @@ class App extends Component {
       width = '933px';
       minHeight = this.state.windowHeight * 0.8;
       sectionHeight = minHeight * 0.4;
-      marginTop = this.state.windowHeight * 0.1;
+      marginTop = this.state.windowHeight * 0.05;
     } else {
       width = '1127px';
       minHeight = this.state.windowHeight * 0.8;
       sectionHeight = minHeight * 0.4;
-      marginTop = this.state.windowHeight * 0.1;
+      marginTop = this.state.windowHeight * 0.05;
     }
 
     var panelStyle = {
