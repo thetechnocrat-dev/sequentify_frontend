@@ -1,1 +1,1 @@
-React frontend SPA for sequentify
+Deprecated. Current repo [here](https://github.com/McMenemy/sequentify_app).
